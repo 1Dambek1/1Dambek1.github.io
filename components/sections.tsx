@@ -369,7 +369,7 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
           <p className="text-xs md:text-xl uppercase tracking-[0.3em] mb-4 opacity-60">
             Гастрономия
           </p>
-          <h2 className="text-4xl md:text-8xl font-serif">ВКУСЫ ТАЙГИ</h2>
+          <h2 className="text-4xl md:text-8xl font-serif">ВКУСЫ СИБИРИ</h2>
         </div>
         <motion.div
           variants={containerVariants}
