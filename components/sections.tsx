@@ -251,7 +251,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Бизнес",
       desc: "Уютный уголок недалеко от центра",
       loc: "Тихий центр",
-      img: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
+      img: "АТЛАС.mp4",
       themeBg: "#1D2530",
       link: "https://atlas-irk.ru/",
     },
@@ -261,11 +261,16 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Дизайнерский",
       desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
-      img: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
+      img: "ТАЙГА.mp4",
       themeBg: "#151C19",
       link: "https://taigahotel.ru/",
     },
   ];
+
+  // Функция для проверки расширения
+  const isVideo = (path: string) => {
+    return path.match(/\.(mp4|webm|ogg)$/i);
+  };
 
   return (
     <Section
@@ -293,7 +298,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               href={h.link}
               target="_blank"
               rel="noopener noreferrer"
-              key={i}
+              key={h.themeId}
               variants={itemVariants}
               className={`group block relative ${
                 i % 2 !== 0 ? "md:translate-y-32" : ""
@@ -312,19 +317,36 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               }}
             >
               <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-6 relative bg-taiga-deep/50">
-                <motion.img
-                  src={h.img}
-                  whileHover={isDesktop ? { scale: 1.05 } : {}}
-                  transition={{ duration: 0.7 }}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {isVideo(h.img) ? (
+                  <motion.video
+                    src={encodeURI(h.img)}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    whileHover={isDesktop ? { scale: 1.05 } : {}}
+                    transition={{ duration: 0.7 }}
+                    className="w-full h-full object-cover pointer-events-none"
+                  />
+                ) : (
+                  <motion.img
+                    src={h.img}
+                    alt={h.name}
+                    loading="lazy"
+                    whileHover={isDesktop ? { scale: 1.05 } : {}}
+                    transition={{ duration: 0.7 }}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+
                 <div className="absolute top-4 right-4 bg-taiga-snow text-taiga-deep px-3 py-1 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-lg z-10">
                   {h.type}
                 </div>
               </div>
+
               <h3
-                className={`text-2xl md:text-4xl font-serif mb-3 transition-colors ${
+                className={`text-2xl md:text-4xl font-serif mb-3 transition-colors duration-500 ${
                   isDesktop ? "group-hover:text-taiga-gold" : "text-taiga-gold"
                 }`}
               >
@@ -333,7 +355,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               <p className="text-xs md:text-sm opacity-80 mb-2 font-light">
                 {h.desc}
               </p>
-              <div className="flex gap-2 text-[10px] opacity-50 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-[10px] opacity-50 uppercase tracking-widest">
                 <MapPin size={14} /> {h.loc}
               </div>
             </motion.a>
