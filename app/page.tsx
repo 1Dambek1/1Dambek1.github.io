@@ -230,7 +230,7 @@ export default function Home() {
         />
 
         <Career
-          onEnter={() => handleSetSectionBg("#5C2323")}
+          onEnter={() => handleSetSectionBg("#151C19")}
           setCursor={setCursor}
         />
 

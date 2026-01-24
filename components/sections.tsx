@@ -256,7 +256,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       name: "ТАЙГА",
       themeId: "taiga",
       type: "Дизайнерский",
-      desc: "Любимое место проживания туристов",
+      desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
       img: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
       themeBg: "#151C19",
@@ -352,9 +352,9 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
     },
     {
       name: "ТАЙГА",
-      desc: "Сибирская душа у Ангары",
+      desc: "Сибирский вкус в сердце города",
       img: "DSC_7380.png.webp",
-      link: "#",
+      link: "https://taigahotel.ru/restaurant#/",
     },
   ];
 
@@ -434,8 +434,8 @@ export const Events = ({ onEnter, setCursor }: any) => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 border-b border-taiga-deep/10 pb-8 gap-4">
           <h2 className="text-4xl md:text-7xl font-serif">
-            ЗАЛЫ ДЛЯ <br />
-            <span className="text-taiga-green italic">ТОРЖЕСТВ</span>
+            Конференц-зал для <br />
+            <span className="text-taiga-green italic">ВАШИХ МЕРПРИЯТИЙ</span>
           </h2>
           <p className="text-[10px] md:text-xs uppercase tracking-widest opacity-60">
             Площадки для ваших событий
@@ -450,10 +450,10 @@ export const Events = ({ onEnter, setCursor }: any) => {
         >
           {[
             {
-              name: "Конференц-зал",
+              name: "Конференц-зал Азатай",
               cap: "до 200 персон",
               img: "photo_5413853646258569104_y.jpg",
-              link: "#",
+              link: "https://azatay.ru/konferenc-zal",
             },
           ].map((h, i) => (
             <motion.a
@@ -484,7 +484,7 @@ export const Events = ({ onEnter, setCursor }: any) => {
               </div>
               <h3 className="text-2xl md:text-3xl font-serif mb-1">{h.name}</h3>
               <p className="text-[10px] opacity-50 uppercase tracking-widest">
-                Подробнее
+                Панорамный конферец зал с видом на Байкал
               </p>
             </motion.a>
           ))}
@@ -604,22 +604,8 @@ export const News = ({ onEnter, setCursor }: any) => {
     {
       id: 1,
       img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600",
-      title: "Новые гастрономические открытия сезона",
-    },
-    {
-      id: 2,
-      img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600",
-      title: "Открытие дизайн-отеля 'ТАЙГА' в центре",
-    },
-    {
-      id: 3,
-      img: "https://images.unsplash.com/photo-1519225421980-715cb0202128?w=600",
-      title: "Бизнес-форум: успех на Байкале",
-    },
-    {
-      id: 4,
-      img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600",
-      title: "Мастер-класс от шефа ресторана 'АЗАТАЙ'",
+      title: "Афиша Азатай за январь",
+      href: "https://azatay.ru/afisha#/",
     },
   ];
 
@@ -669,27 +655,38 @@ export const News = ({ onEnter, setCursor }: any) => {
               <motion.div
                 key={item.id}
                 variants={itemVariants}
-                className="group cursor-pointer min-w-[75%] md:min-w-[300px] flex-shrink-0"
+                className="group  cursor-pointer min-w-[75%] md:min-w-[300px] flex-shrink-0"
                 onMouseEnter={() => isDesktop && setCursor(true, "READ")}
                 onMouseLeave={() => isDesktop && setCursor(false, "")}
               >
-                <div className="h-[250px] md:h-[400px] overflow-hidden mb-6 relative bg-taiga-green rounded-lg">
-                  <img
-                    src={item.img}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex justify-between items-baseline mb-4 border-b border-black/10 pb-2">
-                  <span className="text-xs opacity-50">12.10.2025</span>
-                  <ArrowUpRight
-                    size={16}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
-                <h3 className="text-lg md:text-2xl font-serif leading-tight group-hover:text-taiga-green transition-colors">
-                  {item.title}
-                </h3>
+                {/* Оборачиваем карточку в ссылку */}
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full h-full"
+                >
+                  <div className="h-[250px] md:h-[400px] overflow-hidden mb-6 relative bg-taiga-green rounded-lg">
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="flex justify-between items-baseline mb-4 border-b border-black/10 pb-2">
+                    <span className="text-xs opacity-50">12.10.2025</span>
+                    <ArrowUpRight
+                      size={16}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+
+                  <h3 className="text-lg md:text-2xl font-serif leading-tight group-hover:text-taiga-green transition-colors">
+                    {item.title}
+                  </h3>
+                </a>
               </motion.div>
             ))}
           </motion.div>
@@ -701,14 +698,23 @@ export const News = ({ onEnter, setCursor }: any) => {
 
 export const Footer = ({ onEnter, setCursor }: any) => {
   const isDesktop = true;
-  const hotels = ["Азатай", "Яковлев", "Виктория", "Атлас"];
-  const restaurants = ["Ресторан Азатай", "Ресторан Тайга"];
-  const conferenceHalls = ["Конференц-зал"];
+  const hotels = [
+    { name: "Азатай", href: "https://www.azatay.ru/" },
+    { name: "Яковлев", href: "https://yakovlevhotel.ru/" },
+    { name: "Виктория", href: "https://victoryhotel.ru/" },
+    { name: "Атлас", href: "https://atlas-irk.ru/" },
+    { name: "Тайга", href: "https://taigahotel.ru/" },
+  ];
+  const restaurants = [
+    { name: "Ресторан Азатай", href: "https://azatai-rest.ru" },
+    { name: "Ресторан Тайга", href: "https://taigahotel.ru/restaurant#/" },
+  ];
+  const conferenceHalls = [
+    { name: "Конференц-зал Азатай", href: "https://azatay.ru/konferenc-zal" },
+  ];
   const socialLinks = [
-    { name: "Telegram", href: "#" },
-    { name: "VK", href: "#" },
-    { name: "Instagram*", href: "#" },
-    { name: "YouTube", href: "#" },
+    { name: "Telegram Тайга", href: "https://t.me/taiga_irkutsk_hotel" },
+    { name: "Telegram Азатай", href: " https://t.me/azataybaikal" },
   ];
 
   return (
@@ -729,9 +735,9 @@ export const Footer = ({ onEnter, setCursor }: any) => {
             </h4>
             <ul className="space-y-3 text-xs opacity-70 uppercase tracking-wider">
               {hotels.map((i) => (
-                <li key={i}>
-                  <a href="#" className="hover:text-taiga-deep">
-                    {i}
+                <li key={i.name}>
+                  <a href={i.href} className="hover:text-taiga-deep">
+                    {i.name}
                   </a>
                 </li>
               ))}
@@ -743,9 +749,9 @@ export const Footer = ({ onEnter, setCursor }: any) => {
             </h4>
             <ul className="space-y-3 text-xs opacity-70 uppercase tracking-wider">
               {restaurants.map((i) => (
-                <li key={i}>
-                  <a href="#" className="hover:text-taiga-deep">
-                    {i}
+                <li key={i.name}>
+                  <a href={i.href} className="hover:text-taiga-deep">
+                    {i.name}
                   </a>
                 </li>
               ))}
@@ -757,9 +763,9 @@ export const Footer = ({ onEnter, setCursor }: any) => {
             </h4>
             <ul className="space-y-3 text-xs opacity-70 uppercase tracking-wider">
               {conferenceHalls.map((i) => (
-                <li key={i}>
-                  <a href="#" className="hover:text-taiga-deep">
-                    {i}
+                <li key={i.name}>
+                  <a href={i.href} className="hover:text-taiga-deep">
+                    {i.name}
                   </a>
                 </li>
               ))}
@@ -778,12 +784,12 @@ export const Footer = ({ onEnter, setCursor }: any) => {
                 </li>
               ))}
             </ul>
-            <h4 className="font-bold text-[10px] mt-8 mb-4 md:mb-8 uppercase tracking-widest text-taiga-green">
+            {/* <h4 className="font-bold text-[10px] mt-8 mb-4 md:mb-8 uppercase tracking-widest text-taiga-green">
               Контакты
             </h4>
             <p className="text-lg md:text-xl font-serif mb-2">
               +7 (3952) 00-00-00
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end text-[9px] uppercase opacity-20 tracking-widest border-t border-taiga-deep/5 pt-8 gap-2">
