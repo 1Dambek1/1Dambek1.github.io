@@ -223,6 +223,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       loc: "п. Большое Голоустное",
       img: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
       themeBg: "#3A2226",
+      poster: "",
       link: "https://www.azatay.ru/",
     },
     {
@@ -233,6 +234,8 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       loc: "Центр города",
       img: "historical-wooden-noble-hotel-dark-brown-interior.jpg",
       themeBg: "#2F2520",
+      poster: "",
+
       link: "https://yakovlevhotel.ru/",
     },
     {
@@ -243,6 +246,8 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       loc: "Центр города",
       img: "/elegant-comfortable-hotel-in-historic-city-center.jpg",
       themeBg: "#3D3628",
+      poster: "",
+
       link: "https://victoryhotel.ru/",
     },
     {
@@ -253,6 +258,8 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       loc: "Тихий центр",
       img: "АТЛАС.mp4",
       themeBg: "#1D2530",
+      poster: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
+
       link: "https://atlas-irk.ru/",
     },
     {
@@ -263,14 +270,13 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       loc: "Иркутск",
       img: "ТАЙГА.mp4",
       themeBg: "#151C19",
+      poster: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
+
       link: "https://taigahotel.ru/",
     },
   ];
 
-  // Функция для проверки расширения
-  const isVideo = (path: string) => {
-    return path.match(/\.(mp4|webm|ogg)$/i);
-  };
+  const isVideo = (path: string) => path.match(/\.(mp4|webm|ogg)$/i);
 
   return (
     <Section
@@ -300,34 +306,32 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               rel="noopener noreferrer"
               key={h.themeId}
               variants={itemVariants}
-              className={`group block relative ${
-                i % 2 !== 0 ? "md:translate-y-32" : ""
-              }`}
-              onMouseEnter={() => {
-                if (isDesktop) {
-                  setHoverBg(h.themeBg);
-                  setTheme(h.themeId);
-                }
-              }}
-              onMouseLeave={() => {
-                if (isDesktop) {
-                  setHoverBg(null);
-                  setTheme(null);
-                }
-              }}
+              className={`group block relative ${i % 2 !== 0 ? "md:translate-y-32" : ""}`}
+              onMouseEnter={() =>
+                isDesktop && (setHoverBg(h.themeBg), setTheme(h.themeId))
+              }
+              onMouseLeave={() =>
+                isDesktop && (setHoverBg(null), setTheme(null))
+              }
             >
-              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-6 relative bg-taiga-deep/50">
+              {/* Контейнер медиа */}
+              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-6 relative bg-white/5">
                 {isVideo(h.img) ? (
                   <motion.video
                     src={encodeURI(h.img)}
+                    // Poster - это критично! Показывается мгновенно до загрузки видео
+                    poster={h.poster || ""}
                     autoPlay
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    // Смена metadata на auto для мобильных может помочь, но ест трафик
+                    preload="auto"
                     whileHover={isDesktop ? { scale: 1.05 } : {}}
                     transition={{ duration: 0.7 }}
                     className="w-full h-full object-cover pointer-events-none"
+                    // Фикс для мобильных: принудительный запуск при рендере
+                    onCanPlay={(e) => e.currentTarget.play()}
                   />
                 ) : (
                   <motion.img
@@ -340,15 +344,15 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
                   />
                 )}
 
+                {/* Лейбл типа отеля */}
                 <div className="absolute top-4 right-4 bg-taiga-snow text-taiga-deep px-3 py-1 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-lg z-10">
                   {h.type}
                 </div>
               </div>
 
+              {/* Текстовый блок */}
               <h3
-                className={`text-2xl md:text-4xl font-serif mb-3 transition-colors duration-500 ${
-                  isDesktop ? "group-hover:text-taiga-gold" : "text-taiga-gold"
-                }`}
+                className={`text-2xl md:text-4xl font-serif mb-3 transition-colors duration-500 ${isDesktop ? "group-hover:text-taiga-gold" : "text-taiga-gold"}`}
               >
                 {h.name}
               </h3>
