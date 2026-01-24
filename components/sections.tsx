@@ -74,7 +74,10 @@ export const Header = ({
         </nav>
 
         <div className="flex items-center gap-4">
-          <button className="hidden md:block border border-white/40 text-white px-8 py-3 rounded-sm text-[10px] font-bold uppercase hover:bg-white hover:text-black transition-all duration-500 tracking-widest">
+          <button
+            onClick={() => scrollTo("hotels")}
+            className="hidden md:block border border-white/40 text-white px-8 py-3 rounded-sm text-[10px] font-bold uppercase hover:bg-white hover:text-black transition-all duration-500 tracking-widest"
+          >
             Забронировать
           </button>
           <button
@@ -434,8 +437,8 @@ export const Events = ({ onEnter, setCursor }: any) => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 border-b border-taiga-deep/10 pb-8 gap-4">
           <h2 className="text-4xl md:text-7xl font-serif">
-            Конференц-зал для <br />
-            <span className="text-taiga-green italic">ВАШИХ МЕРПРИЯТИЙ</span>
+            Конференц-зал для ваших мероприятий <br />
+            <span className="text-taiga-green italic"></span>
           </h2>
           <p className="text-[10px] md:text-xs uppercase tracking-widest opacity-60">
             Площадки для ваших событий
