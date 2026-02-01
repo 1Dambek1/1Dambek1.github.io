@@ -6,11 +6,17 @@ import React, { useEffect, useState } from "react";
 export const Logo = () => (
   <div className="flex items-center gap-3 mix-blend-difference text-white">
     {/* Иконка - стилизованное дерево/треугольник */}
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <path d="M20 5L10 25H30L20 5Z" fill="currentColor" />
-      <path d="M20 15L13 30H27L20 15Z" fill="currentColor" fillOpacity="0.7" />
-    </svg>
-
+    <div className="flex items-center gap-3 mix-blend-difference">
+      {/* Используем стандартный тег img.
+       Убедитесь, что файл IMG_3054.PNG лежит в папке /public вашего проекта.
+    */}
+      <img
+        src="/IMG_3054.PNG"
+        alt="Территория Тайги"
+        className="h-10 w-auto object-contain"
+        // h-10 соответствует вашим исходным 40px (40 / 4 = 10)
+      />
+    </div>
     {/* Текстовая часть */}
     <div className="flex flex-col">
       <span className="font-serif text-lg leading-none tracking-[0.2em] uppercase font-bold">
@@ -20,7 +26,6 @@ export const Logo = () => (
         <span className="font-sans text-[9px] leading-none tracking-[0.3em] opacity-80 uppercase">
           Тайги
         </span>
-        <span className="w-1 h-1 rounded-full bg-current opacity-80"></span>
       </div>
     </div>
   </div>

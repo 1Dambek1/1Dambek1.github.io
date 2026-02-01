@@ -1,93 +1,185 @@
 @import "tailwindcss";
 
+
+
 @theme {
+
   --color-taiga-snow: #f2f5f3;
+
   --color-taiga-green: #2a4036;
+
   --color-taiga-deep: #151c19;
+
   --color-taiga-gold: #c8aa6e;
+
   --color-taiga-accent: #e5e5e5;
 
+
+
   /* Теперь оба стека используют Manrope */
+
   --font-sans: "Manrope", sans-serif;
+
   --font-serif: "Manrope", sans-serif;
+
 }
+
+
 
 body {
+
   background-color: var(--color-taiga-snow);
+
   color: var(--color-taiga-deep);
+
   cursor: auto;
+
   overflow-x: hidden;
+
   -webkit-tap-highlight-color: transparent;
+
   /* Принудительная установка шрифта */
+
   font-family: var(--font-sans);
+
 }
+
+
 
 /* Убеждаемся, что заголовки не используют другой шрифт по умолчанию */
+
 h1, h2, h3, h4, h5, h6 {
+
   font-family: var(--font-sans);
+
 }
+
+
 
 @media (pointer: fine) {
+
   body:not([data-route^="/studio"]) {
+
     cursor: none;
+
   }
+
   body:not([data-route^="/studio"]) a,
+
   body:not([data-route^="/studio"]) button,
+
   body:not([data-route^="/studio"]) [role="button"],
+
   body:not([data-route^="/studio"]) input,
+
   body:not([data-route^="/studio"]) textarea {
+
     cursor: none;
+
   }
+
 }
+
+
 
 body.loading {
+
   overflow: hidden;
+
   height: 100vh;
+
 }
+
+
 
 .no-scrollbar::-webkit-scrollbar {
+
   display: none;
+
 }
+
 .no-scrollbar {
+
   -ms-overflow-style: none;
+
   scrollbar-width: none;
+
 }
+
+
 
 /* Горизонтальный слайдер */
+
 .horizontal-scroll-snap {
+
   display: flex;
+
   gap: 2rem;
+
   overflow-x: auto;
+
   scroll-snap-type: x mandatory;
+
   padding-bottom: 1rem;
+
   -webkit-overflow-scrolling: touch;
+
   touch-action: pan-x;
+
 }
+
 .horizontal-scroll-snap > * {
+
   scroll-snap-align: start;
+
   flex-shrink: 0;
+
 }
+
+
 
 /* Шум */
+
 .grain-overlay {
+
   position: fixed;
+
   inset: 0;
+
   width: 100%;
+
   height: 100%;
+
   pointer-events: none;
+
   background-image: url("/grain.png");
+
   opacity: 0.05;
+
   z-index: 100;
+
 }
 
+
+
 /* Скроллбар для модалок */
+
 .scroll-content::-webkit-scrollbar {
+
   width: 4px;
+
 }
+
 .scroll-content::-webkit-scrollbar-thumb {
+
   background-color: var(--color-taiga-green);
+
   border-radius: 2px;
+
 }
+
 .scroll-content::-webkit-scrollbar-track {
+
   background: var(--color-taiga-snow);
+
 }

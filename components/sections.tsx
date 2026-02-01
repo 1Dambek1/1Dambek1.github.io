@@ -781,14 +781,7 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
 
                 {/* Текстовый блок */}
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center border-b border-taiga-deep/10 pb-4">
-                    <span className="text-sm font-medium opacity-60 uppercase tracking-widest">
-                      {item.date}
-                    </span>
-                    <div className="w-12 h-12 rounded-full border border-taiga-deep/20 flex items-center justify-center group-hover:bg-taiga-deep group-hover:text-white transition-all duration-500">
-                      <ArrowUpRight size={20} />
-                    </div>
-                  </div>
+
                   <h3 className="text-3xl md:text-4xl font-light leading-tight">
                     {item.title}
                   </h3>
