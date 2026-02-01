@@ -5,9 +5,21 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  useSpring,
+  useMotionValue,
 } from "framer-motion";
-import { ArrowUpRight, MapPin, Send, Menu, X } from "lucide-react";
-import { Logo, Section } from "./ui";
+import {
+  ArrowUpRight,
+  MapPin,
+  Send,
+  Menu,
+  X,
+  CheckCircle2,
+  Star,
+  Check,
+  ArrowRight,
+} from "lucide-react";
+import { BranchSVG, Logo, Section } from "./ui";
 import { submitCareerForm } from "@/app/sections";
 // ... импорт server actions (об этом ниже)
 
@@ -371,18 +383,19 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
 };
 
 export const Restaurants = ({ onEnter, setCursor }: any) => {
-  const isDesktop = useIsDesktop();
   const restaurantsData = [
     {
       name: "АЗАТАЙ",
       desc: "Панорамный вид на Байкал",
-      img: "DSC03659.jpg",
+      imgRest: "DSC03659.jpg",
+      imgFood: "food1.png", // замените на реальный путь
       link: "https://azatai-rest.ru",
     },
     {
       name: "ТАЙГА",
       desc: "Сибирский вкус в сердце города",
-      img: "DSC_7380.png.webp",
+      imgRest: "DSC_7380.png.webp",
+      imgFood: "food2.png", // замените на реальный путь
       link: "https://taigahotel.ru/restaurant#/",
     },
   ];
@@ -391,62 +404,84 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
     <Section
       id="restaurants"
       onEnter={onEnter}
-      className="py-16 md:py-40 text-taiga-deep relative z-10"
+      className="py-20 md:py-40 text-taiga-deep relative z-10"
     >
       <div className="container mx-auto px-6">
-        <div className="border-b border-taiga-deep/10 pb-10 mb-12 md:mb-20 text-center">
-          <p className="text-xs md:text-xl uppercase tracking-[0.3em] mb-4 opacity-60">
+        {/* Заголовок */}
+        <div className="border-b border-taiga-deep/10 pb-8 mb-16 text-center md:text-left">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 opacity-60">
             Гастрономия
           </p>
-          <h2 className="text-4xl md:text-8xl font-serif">ВКУСЫ СИБИРИ</h2>
+          <h2 className="text-5xl md:text-8xl font-light uppercase tracking-tighter">
+            Вкусы Сибири
+          </h2>
         </div>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="flex flex-col gap-12 md:gap-0"
-        >
+
+        {/* Список */}
+        <div className="grid grid-cols-1 gap-12 md:gap-24">
           {restaurantsData.map((item, i) => (
             <motion.a
+              key={i}
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              key={i}
-              variants={itemVariants}
-              className="md:border-t border-taiga-deep/10 py-0 md:py-20 flex flex-col md:flex-row justify-between items-center group md:hover:bg-taiga-deep md:hover:text-taiga-snow md:px-10 transition-all duration-500 cursor-pointer md:cursor-none rounded-lg"
-              onMouseEnter={() => isDesktop && setCursor(false, "")}
-              onMouseLeave={() => isDesktop && setCursor(false, "")}
+              className="group flex flex-col md:flex-row items-center gap-8 md:gap-16 cursor-none"
+              onMouseEnter={() => setCursor(true, "СМОТРЕТЬ")}
+              onMouseLeave={() => setCursor(false, "")}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.2 }}
             >
-              <div className="flex flex-col md:flex-row items-center gap-4 md:gap-16 text-center md:text-left">
-                <span className="text-xs font-bold opacity-30 md:group-hover:opacity-100 hidden md:block">
-                  0{i + 1}
-                </span>
-                <div>
-                  <h3 className="text-4xl md:text-8xl font-serif md:group-hover:not-italic transition-all duration-500 mb-2">
-                    {item.name}
-                  </h3>
-                  <p className="text-[10px] md:text-xs uppercase tracking-widest opacity-80 md:group-hover:opacity-80 md:group-hover:text-taiga-gold">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-              <div className="w-full h-56 md:w-96 md:h-56 mt-6 md:mt-0 relative md:absolute md:left-1/2 md:-translate-x-1/2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 rounded-sm overflow-hidden md:rotate-3 md:group-hover:rotate-0 shadow-2xl z-20 md:grayscale md:group-hover:grayscale-0 border-4 border-white/10 md:pointer-events-none">
-                <img
-                  src={item.img}
-                  className="w-full h-full object-cover rounded-lg"
-                  loading="lazy"
+              {/* Контейнер с фото */}
+              <div className="relative w-full md:w-[55%] aspect-[16/9] overflow-hidden rounded-2xl shadow-xl">
+                {/* Основное фото (Ресторан) */}
+                <motion.img
+                  src={item.imgRest}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  alt={item.name}
                 />
+
+                {/* Второе фото (Блюдо) - появляется сбоку при наведении */}
+                <motion.div className="absolute top-4 right-4 w-1/3 aspect-square rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl hidden md:block opacity-0 translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
+                  <img
+                    src={item.imgFood || item.imgRest}
+                    className="w-full h-full object-cover"
+                    alt="Dish"
+                  />
+                </motion.div>
+
+                {/* Оверлей при наведении */}
+                <div className="absolute inset-0 bg-taiga-deep/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
-              <div className="flex items-center gap-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 mt-4 md:mt-0">
-                <span className="text-[10px] uppercase tracking-widest border-b border-current pb-1">
-                  Меню
-                </span>
-                <ArrowUpRight size={20} />
+
+              {/* Текст */}
+              <div className="flex-1 text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
+                  <span className="text-taiga-gold font-bold text-sm tracking-widest">
+                    0{i + 1}
+                  </span>
+                  <div className="h-[1px] w-8 bg-taiga-gold/40" />
+                </div>
+
+                <h3 className="text-4xl md:text-6xl mb-4 group-hover:text-taiga-gold transition-colors duration-300">
+                  {item.name}
+                </h3>
+
+                <p className="text-sm md:text-base opacity-60 uppercase tracking-widest leading-relaxed mb-6">
+                  {item.desc}
+                </p>
+
+                <div className="inline-flex items-center gap-2 group-hover:translate-x-2 transition-transform duration-300">
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+                    Перейти на сайт
+                  </span>
+                  <ArrowUpRight size={18} className="text-taiga-gold" />
+                </div>
               </div>
             </motion.a>
           ))}
-        </motion.div>
+        </div>
       </div>
     </Section>
   );
@@ -463,7 +498,8 @@ export const Events = ({ onEnter, setCursor }: any) => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 border-b border-taiga-deep/10 pb-8 gap-4">
           <h2 className="text-4xl md:text-7xl font-serif">
-            Конференц-зал для ваших мероприятий <br />
+            Конференц-зал
+            <br />
             <span className="text-taiga-green italic"></span>
           </h2>
           <p className="text-[10px] md:text-xs uppercase tracking-widest opacity-60">
@@ -480,6 +516,12 @@ export const Events = ({ onEnter, setCursor }: any) => {
           {[
             {
               name: "Конференц-зал Азатай",
+              cap: "до 200 персон",
+              img: "photo_5413853646258569104_y.jpg",
+              link: "https://azatay.ru/konferenc-zal",
+            },
+            {
+              name: "Конференц-зал Тайга",
               cap: "до 200 персон",
               img: "photo_5413853646258569104_y.jpg",
               link: "https://azatay.ru/konferenc-zal",
@@ -524,100 +566,90 @@ export const Events = ({ onEnter, setCursor }: any) => {
 };
 
 export const Career = ({ onEnter, setCursor }: any) => {
-  const isDesktop = useIsDesktop(); // Предполагаем, что этот хук есть выше
-  const [formState, setFormState] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setFormState("loading");
-
-    const formData = new FormData(event.currentTarget);
-    const result = await submitCareerForm(formData);
-
-    if (result.success) {
-      setFormState("success");
-      // Сброс формы
-      event.currentTarget.reset();
-    } else {
-      setFormState("error");
-    }
-  }
+  const [status, setStatus] = useState("idle");
 
   return (
-    <Section onEnter={onEnter} className="py-16 md:py-32 text-taiga-snow">
+    <Section onEnter={onEnter} className="py-20 md:py-32">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-12 md:gap-24 items-start">
-          <div className="flex-1">
-            <span className="text-taiga-gold uppercase tracking-widest text-xs mb-4 md:mb-6 block">
-              Команда
-            </span>
-            <h2 className="text-4xl md:text-6xl font-serif mb-6 md:mb-10">
-              КАРЬЕРА <br />В ТАЙГЕ
-            </h2>
-            <p className="opacity-80 text-sm md:text-lg mb-6 md:mb-12 max-w-md leading-relaxed">
-              Станьте частью нашей семьи. Заполните форму, и мы свяжемся с вами.
-            </p>
+        <div className="bg-white rounded-[32px] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+          {/* Левая часть: Фото (50%) */}
+          <div className="md:w-1/2 h-[300px] md:h-auto relative">
+            <img
+              src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
+              className="absolute inset-0 w-full h-full object-cover"
+              alt="Career at Taiga"
+            />
+            <div className="absolute inset-0 bg-taiga-deep/20" />
+            <div className="absolute bottom-8 left-8 text-white">
+              <p className="text-[10px] uppercase tracking-[0.3em] opacity-80 mb-2">
+                Работа у нас
+              </p>
+              <h2 className="text-3xl md:text-4xl font-light uppercase tracking-tighter">
+                Станьте частью <br /> атмосферы
+              </h2>
+            </div>
           </div>
 
-          <div className="flex-1 w-full bg-black/20 backdrop-blur-md p-6 md:p-12 rounded-lg border border-white/10 shadow-2xl">
-            {formState === "success" ? (
-              <div className="text-center py-12 animate-in fade-in">
-                <h3 className="text-3xl font-serif text-taiga-gold mb-4">
-                  Заявка принята!
+          {/* Правая часть: Простая форма (50%) */}
+          <div className="md:w-1/2 p-8 md:p-16 bg-white flex flex-col justify-center">
+            {status === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center space-y-4"
+              >
+                <div className="w-16 h-16 bg-taiga-green text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Check size={32} />
+                </div>
+                <h3 className="text-2xl text-taiga-deep font-medium">
+                  Заявка отправлена
                 </h3>
-                <p className="opacity-80">
-                  Мы свяжемся с вами в ближайшее время.
+                <p className="text-taiga-deep/50 text-sm">
+                  Мы перезвоним вам в ближайшее время.
                 </p>
-                <button
-                  onClick={() => setFormState("idle")}
-                  className="mt-6 text-xs uppercase tracking-widest border-b border-white/30 hover:border-white pb-1"
-                >
-                  Отправить еще одну
-                </button>
-              </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-                <div>
-                  <input
-                    name="name"
-                    required
-                    type="text"
-                    className="w-full bg-transparent border-b border-white/20 py-2 focus:border-taiga-gold outline-none placeholder-white/20 text-sm transition-colors"
-                    placeholder="Ваше Имя"
-                  />
-                </div>
-                <div>
-                  <input
-                    name="phone"
-                    required
-                    type="tel"
-                    className="w-full bg-transparent border-b border-white/20 py-2 focus:border-taiga-gold outline-none placeholder-white/20 text-sm transition-colors"
-                    placeholder="+7 (___) ___-__-__"
-                  />
-                </div>
-
-                {formState === "error" && (
-                  <p className="text-red-400 text-xs">
-                    Произошла ошибка. Попробуйте еще раз.
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-2xl text-taiga-deep uppercase ">
+                    Оставьте контакты
+                  </h3>
+                  <p className="text-taiga-deep/40 text-sm">
+                    Мы свяжемся с вами, чтобы обсудить вакансии
                   </p>
-                )}
+                </div>
 
-                <button
-                  disabled={formState === "loading"}
-                  type="submit"
-                  className="w-full bg-taiga-gold text-taiga-deep py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors flex items-center justify-center gap-2 group text-xs md:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  onMouseEnter={() => isDesktop && setCursor(false, "")}
-                  onMouseLeave={() => isDesktop && setCursor(false, "")}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setStatus("success");
+                  }}
+                  className="space-y-6"
                 >
-                  {formState === "loading" ? "Отправка..." : "Отправить"}
-                  <Send
-                    size={16}
-                    className="group-hover:translate-x-2 transition-transform"
+                  <input
+                    type="text"
+                    placeholder="Ваше имя"
+                    required
+                    className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all"
                   />
-                </button>
-              </form>
+                  <input
+                    type="tel"
+                    placeholder="Телефон"
+                    required
+                    className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all"
+                  />
+
+                  <button
+                    type="submit"
+                    onMouseEnter={() => setCursor(true, "SEND")}
+                    onMouseLeave={() => setCursor(false, "")}
+                    className="w-full bg-[#D6C6B0] hover:bg-[#D6C6B0] text-white h-16 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg shadow-taiga-deep/10"
+                  >
+                    Отправить
+                    <ArrowRight size={18} />
+                  </button>
+                </form>
+              </div>
             )}
           </div>
         </div>
@@ -625,106 +657,156 @@ export const Career = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
-export const News = ({ onEnter, setCursor }: any) => {
-  const isDesktop = useIsDesktop();
-  const constraintsRef = useRef(null);
-  const [constraints, setConstraints] = useState({ left: 0, right: 0 });
+
+export const News = ({ onEnter, setCursor, isDesktop }: any) => {
   const newsData = [
     {
       id: 1,
-      img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600",
-      title: "Афиша Азатай за январь",
+      img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+      title: "Афиша мероприятий ресторана АЗАТАЙ",
+      desc: "Музыкальные вечера, гастроужины и атмосфера байкальского гостеприимства в новом месяце.",
+      href: "https://azatay.ru/afisha#/",
+    },
+    {
+      id: 2,
+      img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+      title: "Гастрономический сет «Тайга»",
+      desc: "Уникальное путешествие по вкусам Сибири в сопровождении авторских напитков.",
       href: "https://azatay.ru/afisha#/",
     },
   ];
 
-  useEffect(() => {
-    if (constraintsRef.current) {
-      const container = constraintsRef.current as HTMLElement;
-      const content = container.querySelector(
-        ".news-content-wrapper",
-      ) as HTMLElement;
-
-      if (content) {
-        const totalContentWidth = content.scrollWidth;
-        const viewportWidth = container.offsetWidth;
-        if (totalContentWidth > viewportWidth) {
-          setConstraints({ left: viewportWidth - totalContentWidth, right: 0 });
-        } else {
-          setConstraints({ left: 0, right: 0 });
-        }
-      }
-    }
-  }, [newsData.length, isDesktop]);
+  // Массив ягод (увеличено до 60 штук для густоты)
+  const berries = Array.from({ length: 10 }).map((_, i) => ({
+    id: i,
+    top: `${Math.random() * 100}%`,
+    left: `${Math.random() * 45}%`, // Рассыпаны по левой части
+    size: Math.random() * 10 + 6,
+    blur: Math.random() > 0.8 ? "2px" : "0px",
+    delay: Math.random() * 5,
+    duration: Math.random() * 3 + 2,
+  }));
 
   return (
     <Section
       id="news"
       onEnter={onEnter}
-      className="py-16 md:py-32 text-taiga-deep"
+      className="py-24 md:py-40 text-taiga-deep overflow-hidden relative" // Убрал bg-белый, теперь фон из handleSetSectionBg
     >
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-6xl font-serif mb-8 md:mb-12 border-b border-current pb-6">
-          СОБЫТИЯ
-        </h2>
+      {/* ДЕКОР СЛЕВА: Ветка и россыпь мерцающей брусники */}
+      <div className="absolute left-0 top-0 w-full h-full pointer-events-none">
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          ref={constraintsRef}
-          className="horizontal-scroll-snap -mx-6 md:mx-0 px-6 md:px-0 overflow-hidden"
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 0.18, x: 0 }}
+          transition={{ duration: 2 }}
+          className="absolute -left-10 top-0 w-1/2 h-full"
         >
+          <BranchSVG />
+        </motion.div>
+
+        {berries.map((berry) => (
           <motion.div
-            drag="x"
-            dragConstraints={constraints}
-            className="flex gap-6 md:gap-12 cursor-grab active:cursor-grabbing news-content-wrapper"
+            key={berry.id}
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 0.8, scale: 1 }}
+            transition={{ delay: Math.random() * 1.2, duration: 1 }}
+            className="absolute rounded-full"
+            style={{
+              top: berry.top,
+              left: berry.left,
+              width: berry.size,
+              height: berry.size,
+              filter: `blur(${berry.blur})`,
+              background:
+                "radial-gradient(circle at 35% 35%, #b91c1c, #450a0a)",
+              boxShadow: "inset -2px -2px 4px rgba(0,0,0,0.4)",
+            }}
           >
+            {/* Эффект мерцания блика */}
+            <motion.div
+              animate={{
+                opacity: [0.1, 0.8, 0.1],
+                scale: [0.8, 1.2, 0.8],
+              }}
+              transition={{
+                duration: berry.duration,
+                repeat: Infinity,
+                delay: berry.delay,
+                ease: "easeInOut",
+              }}
+              className="absolute inset-0 rounded-full bg-white/40 blur-[1px]"
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-end">
+          {/* Заголовок (справа, крупный) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16 text-right"
+          >
+            <p className="text-xs uppercase tracking-[0.4em] opacity-40 mb-4">
+              События
+            </p>
+            <h2 className="text-6xl md:text-8xl font-light leading-none uppercase tracking-tighter">
+              Афиша
+            </h2>
+          </motion.div>
+
+          {/* КОНТЕЙНЕР НОВОСТЕЙ В РЯД (Увеличил ширину) */}
+          <div className="flex flex-col md:flex-row gap-12 justify-end w-full lg:w-[85%]">
             {newsData.map((item) => (
-              <motion.div
+              <motion.a
                 key={item.id}
-                variants={itemVariants}
-                className="group  cursor-pointer min-w-[75%] md:min-w-[300px] flex-shrink-0"
-                onMouseEnter={() => isDesktop && setCursor(true, "READ")}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block relative w-full md:w-[400px]" // Увеличенная ширина карточки
+                onMouseEnter={() => isDesktop && setCursor(true, "СМОТРЕТЬ")}
                 onMouseLeave={() => isDesktop && setCursor(false, "")}
               >
-                {/* Оборачиваем карточку в ссылку */}
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full h-full"
-                >
-                  <div className="h-[250px] md:h-[400px] overflow-hidden mb-6 relative bg-taiga-green rounded-lg">
-                    <img
-                      src={item.img}
-                      alt={item.title}
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                      loading="lazy"
-                    />
-                  </div>
+                {/* Картинка: крупная и четкая */}
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-8 shadow-2xl border border-taiga-deep/5">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-taiga-deep/10 group-hover:bg-transparent transition-colors duration-700" />
+                </div>
 
-                  <div className="flex justify-between items-baseline mb-4 border-b border-black/10 pb-2">
-                    <span className="text-xs opacity-50">12.10.2025</span>
-                    <ArrowUpRight
-                      size={16}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    />
+                {/* Текстовый блок */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b border-taiga-deep/10 pb-4">
+                    <span className="text-sm font-medium opacity-60 uppercase tracking-widest">
+                      {item.date}
+                    </span>
+                    <div className="w-12 h-12 rounded-full border border-taiga-deep/20 flex items-center justify-center group-hover:bg-taiga-deep group-hover:text-white transition-all duration-500">
+                      <ArrowUpRight size={20} />
+                    </div>
                   </div>
-
-                  <h3 className="text-lg md:text-2xl font-serif leading-tight group-hover:text-taiga-green transition-colors">
+                  <h3 className="text-3xl md:text-4xl font-light leading-tight">
                     {item.title}
                   </h3>
-                </a>
-              </motion.div>
+                  <p className="text-sm opacity-50 max-w-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.a>
             ))}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
+
+      {/* Линия декоративная снизу */}
+      <div className="absolute bottom-10 right-0 w-1/2 h-px bg-gradient-to-l from-taiga-deep/10 to-transparent" />
     </Section>
   );
 };
-
 export const Footer = ({ onEnter, setCursor }: any) => {
   const isDesktop = true;
   const hotels = [
