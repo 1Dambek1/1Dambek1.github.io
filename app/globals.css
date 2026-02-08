@@ -1,9 +1,6 @@
 @import "tailwindcss";
 
-
-
 @theme {
-
   --color-taiga-snow: #f2f5f3;
 
   --color-taiga-green: #2a4036;
@@ -14,20 +11,14 @@
 
   --color-taiga-accent: #e5e5e5;
 
-
-
   /* Теперь оба стека используют Manrope */
 
   --font-sans: "Manrope", sans-serif;
 
   --font-serif: "Manrope", sans-serif;
-
 }
 
-
-
 body {
-
   background-color: var(--color-taiga-snow);
 
   color: var(--color-taiga-deep);
@@ -41,77 +32,52 @@ body {
   /* Принудительная установка шрифта */
 
   font-family: var(--font-sans);
-
 }
-
-
 
 /* Убеждаемся, что заголовки не используют другой шрифт по умолчанию */
 
-h1, h2, h3, h4, h5, h6 {
-
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans);
-
 }
 
-
-
 @media (pointer: fine) {
-
   body:not([data-route^="/studio"]) {
-
     cursor: none;
-
   }
 
   body:not([data-route^="/studio"]) a,
-
   body:not([data-route^="/studio"]) button,
-
   body:not([data-route^="/studio"]) [role="button"],
-
   body:not([data-route^="/studio"]) input,
-
   body:not([data-route^="/studio"]) textarea {
-
     cursor: none;
-
   }
-
 }
 
-
-
 body.loading {
-
   overflow: hidden;
 
   height: 100vh;
-
 }
 
-
-
 .no-scrollbar::-webkit-scrollbar {
-
   display: none;
-
 }
 
 .no-scrollbar {
-
   -ms-overflow-style: none;
 
   scrollbar-width: none;
-
 }
-
-
 
 /* Горизонтальный слайдер */
 
 .horizontal-scroll-snap {
-
   display: flex;
 
   gap: 2rem;
@@ -125,23 +91,17 @@ body.loading {
   -webkit-overflow-scrolling: touch;
 
   touch-action: pan-x;
-
 }
 
 .horizontal-scroll-snap > * {
-
   scroll-snap-align: start;
 
   flex-shrink: 0;
-
 }
-
-
 
 /* Шум */
 
 .grain-overlay {
-
   position: fixed;
 
   inset: 0;
@@ -157,29 +117,62 @@ body.loading {
   opacity: 0.05;
 
   z-index: 100;
-
 }
-
-
 
 /* Скроллбар для модалок */
 
 .scroll-content::-webkit-scrollbar {
-
   width: 4px;
-
 }
 
 .scroll-content::-webkit-scrollbar-thumb {
-
   background-color: var(--color-taiga-green);
 
   border-radius: 2px;
-
 }
 
 .scroll-content::-webkit-scrollbar-track {
-
   background: var(--color-taiga-snow);
+}
 
+/* globals.css */
+@font-face {
+  font-family: "FM Bolyar Pro";
+  src: url("/fonts/FMBolyarPro-100.woff2") format("woff2");
+  font-weight: 100;
+}
+@font-face {
+  font-family: "FM Bolyar Pro";
+  src: url("/fonts/FMBolyarPro-300.woff2") format("woff2");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "FM Bolyar Pro";
+  src: url("/fonts/FMBolyarPro-500.woff2") format("woff2");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "FM Bolyar Pro";
+  src: url("/fonts/FMBolyarPro-700.woff2") format("woff2");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "FM Bolyar Pro";
+  src: url("/fonts/FMBolyarPro-900.woff2") format("woff2");
+  font-weight: 900;
+}
+
+@theme {
+  --font-serif: "FM Bolyar Pro", serif;
+  --font-sans: "Manrope", sans-serif;
+}
+
+/* Глобальные настройки заголовков разделов */
+.section-header {
+  font-family: var(--font-serif);
+  font-weight: 700; /* Используем ваш 700 вес */
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  width: 100%;
 }

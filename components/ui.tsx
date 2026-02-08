@@ -13,7 +13,7 @@ export const Logo = () => (
       <img
         src="/IMG_3054.PNG"
         alt="Территория Тайги"
-        className="h-10 w-auto object-contain"
+        className="h-18 w-auto object-contain"
         // h-10 соответствует вашим исходным 40px (40 / 4 = 10)
       />
     </div>

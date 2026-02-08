@@ -226,6 +226,7 @@ export const Hero = ({ onEnter }: any) => {
 
 export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
   const isDesktop = useIsDesktop();
+
   const hotelsData = [
     {
       name: "АЗАТАЙ",
@@ -234,6 +235,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Загородный отдых на берегу Байкала",
       loc: "п. Большое Голоустное",
       img: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
+      logo: "/logos/azatay-white.svg", // Добавьте путь к логотипу
       themeBg: "#3A2226",
       poster: "",
       link: "https://www.azatay.ru/",
@@ -245,9 +247,9 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Отель в доме купца Н.В. Яковлева",
       loc: "Центр города",
       img: "historical-wooden-noble-hotel-dark-brown-interior.jpg",
+      logo: "/logos/yakovlev-white.svg",
       themeBg: "#2F2520",
       poster: "",
-
       link: "https://yakovlevhotel.ru/",
     },
     {
@@ -257,9 +259,9 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Стиль и комфорт в самом центре",
       loc: "Центр города",
       img: "/elegant-comfortable-hotel-in-historic-city-center.jpg",
+      logo: "/logos/victoria-white.svg",
       themeBg: "#3D3628",
       poster: "",
-
       link: "https://victoryhotel.ru/",
     },
     {
@@ -269,9 +271,9 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Уютный уголок недалеко от центра",
       loc: "Тихий центр",
       img: "АТЛАС.mp4",
+      logo: "/logos/atlas-white.svg",
       themeBg: "#1D2530",
       poster: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
-
       link: "https://atlas-irk.ru/",
     },
     {
@@ -280,10 +282,10 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Дизайнерский",
       desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
-      img: "ТАЙГА.mp4",
+      img: "ТАЙГА.mp4",
+      logo: "/logos/taiga-white.svg",
       themeBg: "#151C19",
       poster: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
-
       link: "https://taigahotel.ru/",
     },
   ];
@@ -297,9 +299,12 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       className="py-16 md:py-32 text-taiga-snow relative z-10"
     >
       <div className="container mx-auto px-6">
-        <div className="flex justify-between items-end mb-12 md:mb-24 border-b border-white/10 pb-8">
-          <h2 className="text-4xl md:text-8xl font-serif">ОТЕЛИ</h2>
-          <p className="text-[10px] md:text-xs uppercase tracking-widest max-w-xs opacity-60 text-right">
+        {/* Шапка раздела: Центрированный заголовок */}
+        <div className="flex flex-col items-center mb-16 md:mb-24 border-b border-white/10 pb-12 text-center">
+          <h2 className="text-5xl md:text-8xl font-serif uppercase tracking-[0.1em]">
+            Отели
+          </h2>
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-60 mt-4">
             Коллекция уникальных мест
           </p>
         </div>
@@ -318,7 +323,9 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               rel="noopener noreferrer"
               key={h.themeId}
               variants={itemVariants}
-              className={`group block relative ${i % 2 !== 0 ? "md:translate-y-32" : ""}`}
+              className={`group block relative ${
+                i % 2 !== 0 ? "md:translate-y-32" : ""
+              }`}
               onMouseEnter={() =>
                 isDesktop && (setHoverBg(h.themeBg), setTheme(h.themeId))
               }
@@ -327,22 +334,19 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               }
             >
               {/* Контейнер медиа */}
-              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-6 relative bg-white/5">
+              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-8 relative bg-white/5 shadow-2xl">
                 {isVideo(h.img) ? (
                   <motion.video
                     src={encodeURI(h.img)}
-                    // Poster - это критично! Показывается мгновенно до загрузки видео
                     poster={h.poster || ""}
                     autoPlay
                     muted
                     loop
                     playsInline
-                    // Смена metadata на auto для мобильных может помочь, но ест трафик
                     preload="auto"
                     whileHover={isDesktop ? { scale: 1.05 } : {}}
                     transition={{ duration: 0.7 }}
                     className="w-full h-full object-cover pointer-events-none"
-                    // Фикс для мобильных: принудительный запуск при рендере
                     onCanPlay={(e) => e.currentTarget.play()}
                   />
                 ) : (
@@ -356,22 +360,34 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
                   />
                 )}
 
-                {/* Лейбл типа отеля */}
                 <div className="absolute top-4 right-4 bg-taiga-snow text-taiga-deep px-3 py-1 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-lg z-10">
                   {h.type}
                 </div>
               </div>
 
-              {/* Текстовый блок */}
+              {/* Блок с логотипом конкретного отеля */}
+              <div className="flex items-center gap-3 mb-4">
+                <img
+                  src={h.logo}
+                  alt={`${h.name} logo`}
+                  className="h-8 md:h-10 w-auto object-contain opacity-90"
+                />
+                <div className="h-[1px] w-12 bg-white/20" />
+              </div>
+
               <h3
-                className={`text-2xl md:text-4xl font-serif mb-3 transition-colors duration-500 ${isDesktop ? "group-hover:text-taiga-gold" : "text-taiga-gold"}`}
+                className={`text-3xl md:text-5xl font-serif mb-3 uppercase tracking-wider transition-colors duration-500 ${
+                  isDesktop ? "group-hover:text-taiga-gold" : "text-taiga-gold"
+                }`}
               >
                 {h.name}
               </h3>
-              <p className="text-xs md:text-sm opacity-80 mb-2 font-light">
+
+              <p className="text-sm md:text-base opacity-70 mb-4 font-light max-w-sm">
                 {h.desc}
               </p>
-              <div className="flex items-center gap-2 text-[10px] opacity-50 uppercase tracking-widest">
+
+              <div className="flex items-center gap-2 text-[10px] opacity-50 uppercase tracking-[0.2em]">
                 <MapPin size={14} /> {h.loc}
               </div>
             </motion.a>
@@ -381,7 +397,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
     </Section>
   );
 };
-
 export const Restaurants = ({ onEnter, setCursor }: any) => {
   const restaurantsData = [
     {
@@ -489,6 +504,7 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
 
 export const Events = ({ onEnter, setCursor }: any) => {
   const isDesktop = useIsDesktop();
+
   return (
     <Section
       id="events"
@@ -496,16 +512,16 @@ export const Events = ({ onEnter, setCursor }: any) => {
       className="py-16 md:py-32 text-taiga-deep relative z-10"
     >
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 border-b border-taiga-deep/10 pb-8 gap-4">
-          <h2 className="text-4xl md:text-7xl font-serif">
-            Конференц-зал
-            <br />
-            <span className="text-taiga-green italic"></span>
+        {/* Центрированный заголовок раздела */}
+        <div className="flex flex-col items-center mb-16 md:mb-24 border-b border-taiga-deep/10 pb-12 text-center">
+          <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-[0.1em]">
+            Конференц-залы
           </h2>
-          <p className="text-[10px] md:text-xs uppercase tracking-widest opacity-60">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-60 mt-4">
             Площадки для ваших событий
           </p>
         </div>
+
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -546,6 +562,8 @@ export const Events = ({ onEnter, setCursor }: any) => {
                   className="w-full h-full object-cover md:group-hover:scale-105 transition-transform duration-1000 md:group-hover:grayscale-0"
                   loading="lazy"
                 />
+
+                {/* Вместимость и стрелка */}
                 <div className="absolute bottom-0 left-0 bg-white/90 backdrop-blur px-4 py-3 md:px-6 md:py-4 w-full flex justify-between items-center">
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-taiga-green">
                     {h.cap}
@@ -553,9 +571,23 @@ export const Events = ({ onEnter, setCursor }: any) => {
                   <ArrowUpRight size={16} />
                 </div>
               </div>
-              <h3 className="text-2xl md:text-3xl font-serif mb-1">{h.name}</h3>
+
+              {/* Логотип отеля над названием зала */}
+              <div className="flex items-center gap-3 mb-2">
+                <img
+                  src="/logo-hotel.svg" // Замените на реальный путь к логотипу
+                  alt="Hotel Logo"
+                  className="h-6 md:h-8 w-auto opacity-80"
+                />
+                <div className="h-[1px] w-8 bg-taiga-deep/20" />{" "}
+                {/* Декоративная линия */}
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-serif mb-1 uppercase tracking-wide">
+                {h.name}
+              </h3>
               <p className="text-[10px] opacity-50 uppercase tracking-widest">
-                Панорамный конферец зал с видом на Байкал
+                Панорамный конференц-зал с видом на Байкал
               </p>
             </motion.a>
           ))}
@@ -564,7 +596,6 @@ export const Events = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
-
 export const Career = ({ onEnter, setCursor }: any) => {
   const [status, setStatus] = useState("idle");
 
@@ -585,7 +616,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
                 Работа у нас
               </p>
               <h2 className="text-3xl md:text-4xl font-light uppercase tracking-tighter">
-                Станьте частью <br /> атмосферы
+                Станьте частью <br /> тайги
               </h2>
             </div>
           </div>
@@ -663,37 +694,38 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
     {
       id: 1,
       img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-      title: "Афиша мероприятий ресторана АЗАТАЙ",
+      title: "Событий отеля АЗАТАЙ",
       desc: "Музыкальные вечера, гастроужины и атмосфера байкальского гостеприимства в новом месяце.",
       href: "https://azatay.ru/afisha#/",
     },
     {
       id: 2,
       img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
-      title: "Гастрономический сет «Тайга»",
-      desc: "Уникальное путешествие по вкусам Сибири в сопровождении авторских напитков.",
+      title: "Событий отеля АЗАТАЙ",
+      desc: "Уникальное путешествие по Сибири в сопровождении авторских мероприятий.",
       href: "https://azatay.ru/afisha#/",
     },
   ];
-
-  // Массив ягод (увеличено до 60 штук для густоты)
-  const berries = Array.from({ length: 10 }).map((_, i) => ({
-    id: i,
-    top: `${Math.random() * 100}%`,
-    left: `${Math.random() * 45}%`, // Рассыпаны по левой части
-    size: Math.random() * 10 + 6,
-    blur: Math.random() > 0.8 ? "2px" : "0px",
-    delay: Math.random() * 5,
-    duration: Math.random() * 3 + 2,
-  }));
+  const [berryList, setBerryList] = useState<any[]>([]);
+  useEffect(() => {
+    const generatedBerries = Array.from({ length: 10 }).map((_, i) => ({
+      id: i,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 45}%`,
+      size: Math.random() * 10 + 6,
+      blur: Math.random() > 0.8 ? "2px" : "0px",
+      delay: Math.random() * 5,
+      duration: Math.random() * 3 + 2,
+    }));
+    setBerryList(generatedBerries);
+  }, []);
 
   return (
     <Section
       id="news"
       onEnter={onEnter}
-      className="py-24 md:py-40 text-taiga-deep overflow-hidden relative" // Убрал bg-белый, теперь фон из handleSetSectionBg
+      className="py-24 md:py-40 text-taiga-deep overflow-hidden relative"
     >
-      {/* ДЕКОР СЛЕВА: Ветка и россыпь мерцающей брусники */}
       <div className="absolute left-0 top-0 w-full h-full pointer-events-none">
         <motion.div
           initial={{ opacity: 0, x: -100 }}
@@ -704,12 +736,13 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
           <BranchSVG />
         </motion.div>
 
-        {berries.map((berry) => (
+        {/* 3. Рендерим только если ягоды сгенерированы */}
+        {berryList.map((berry) => (
           <motion.div
             key={berry.id}
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 0.8, scale: 1 }}
-            transition={{ delay: Math.random() * 1.2, duration: 1 }}
+            transition={{ delay: Math.random() * 1.2, duration: 1 }} // Здесь Math.random тоже лучше заменить на фиксированное из стейта, если ошибка останется
             className="absolute rounded-full"
             style={{
               top: berry.top,
@@ -722,7 +755,6 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
               boxShadow: "inset -2px -2px 4px rgba(0,0,0,0.4)",
             }}
           >
-            {/* Эффект мерцания блика */}
             <motion.div
               animate={{
                 opacity: [0.1, 0.8, 0.1],
@@ -749,11 +781,8 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
             viewport={{ once: true }}
             className="mb-16 text-right"
           >
-            <p className="text-xs uppercase tracking-[0.4em] opacity-40 mb-4">
-              События
-            </p>
-            <h2 className="text-6xl md:text-8xl font-light leading-none uppercase tracking-tighter">
-              Афиша
+            <h2 className="text-3xl md:text-8xl font-light leading-none uppercase tracking-tighter">
+              Событийная тайга
             </h2>
           </motion.div>
 
@@ -781,7 +810,6 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
 
                 {/* Текстовый блок */}
                 <div className="space-y-4">
-
                   <h3 className="text-3xl md:text-4xl font-light leading-tight">
                     {item.title}
                   </h3>
