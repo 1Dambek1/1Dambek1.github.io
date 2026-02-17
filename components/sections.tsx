@@ -79,7 +79,7 @@ export const Header = ({
               onMouseLeave={() => isDesktop && setCursor(false, "")}
             >
               {item.name}
-              <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-taiga-gold transition-all group-hover:w-full" />
+              <span className="absolute -bottom-2 left-0 w-0 h-px bg-taiga-gold transition-all group-hover:w-full" />
             </button>
           ))}
         </nav>
@@ -107,7 +107,7 @@ export const Header = ({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween" }}
-            className="fixed inset-0 bg-[#151C19] z-[100] flex flex-col items-center justify-center text-[#F2F5F3]"
+            className="fixed inset-0 bg-[#151C19] z-100 flex flex-col items-center justify-center text-[#F2F5F3]"
           >
             <button
               className="absolute top-6 right-6"
@@ -140,14 +140,12 @@ export const Header = ({
   );
 };
 
-// --- HERO (ИСПРАВЛЕНО: Четкий текст) ---
+// --- HERO (ИСПРАВЛЕНО: Адаптивность и размеры) ---
 export const Hero = ({ onEnter }: any) => {
   const { scrollY } = useScroll();
   const scrollRange = [0, 1000];
   const scale = useTransform(scrollY, scrollRange, [1, 1.15]);
   const opacity = useTransform(scrollY, [0, 700, 1000], [1, 1, 0]);
-
-  const youtubeVideoId = "rV_ERKtNyNA";
 
   const [index, setIndex] = useState(0);
   const words = ["ДОВЕРИЯ", "КОМФОРТА", "СЕРВИСА", "ПРИРОДЫ"];
@@ -158,7 +156,7 @@ export const Hero = ({ onEnter }: any) => {
       2500,
     );
     return () => clearInterval(i);
-  }, []);
+  }, []); // Убери words.length отсюда
 
   return (
     <Section
@@ -167,14 +165,20 @@ export const Hero = ({ onEnter }: any) => {
       className="h-[100vh] md:h-[140vh] relative"
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-        {/* ИЗМЕНЕНИЯ ЗДЕСЬ: Убран mix-blend-difference, добавлен drop-shadow и белый цвет */}
-        <div className="text-center z-20 text-white px-4 mt-20 md:mt-0 drop-shadow-lg">
-          <p className="text-[10px] md:text-[10px] uppercase tracking-[0.6em] mb-4 border-b border-white/50 pb-2 inline-block shadow-black/50">
+        {/* Контент заголовка */}
+        <div className="text-center z-20 text-white px-6 mt-10 md:mt-0 drop-shadow-2xl">
+          <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-4 border-b border-white/30 pb-2 inline-block">
             Сеть отелей и ресторанов
           </p>
-          <h1 className="text-[13vw] md:text-[8vw] leading-[0.9] font-serif font-medium">
-            ТЕРРИТОРИЯ <br />
-            <span className="block h-[1.1em] overflow-hidden text-taiga-gold">
+
+          <h1 className="flex flex-col items-center justify-center">
+            {/* На мобилках text-[11vw], на десктопе [8vw] */}
+            <span className="text-[11vw] md:text-[8vw] leading-none font-serif font-medium tracking-tight">
+              ТЕРРИТОРИЯ
+            </span>
+
+            {/* Контейнер для меняющихся слов */}
+            <span className="block h-[1.2em] overflow-hidden text-taiga-gold text-[11vw] md:text-[8vw] leading-none font-serif font-medium tracking-tight">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={words[index]}
@@ -191,6 +195,7 @@ export const Hero = ({ onEnter }: any) => {
           </h1>
         </div>
 
+        {/* Видео-фон */}
         <motion.div
           style={{ scale, opacity }}
           className="absolute inset-0 w-full h-full z-10"
@@ -202,18 +207,10 @@ export const Hero = ({ onEnter }: any) => {
             loop
             playsInline
             preload="metadata"
-            className="
-    w-full h-full absolute top-1/2 left-1/2
-    -translate-x-1/2 -translate-y-1/2
-    min-w-[300%] md:min-w-[150%]
-    min-h-[150%]
-    object-cover
-    pointer-events-none
-  "
+            className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[300%] md:min-w-[150%] min-h-[150%] object-cover pointer-events-none"
           />
-
-          {/* затемнение для контраста */}
-          <div className="absolute inset-0 bg-black/50" />
+          {/* Затемнение для читаемости */}
+          <div className="absolute inset-0 bg-black/40" />
         </motion.div>
       </div>
     </Section>
@@ -400,14 +397,12 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
   const restaurantsData = [
     {
       name: "АЗАТАЙ",
-      desc: "Панорамный вид на Байкал",
       imgRest: "DSC03659.jpg",
       imgFood: "food1.png", // замените на реальный путь
       link: "https://azatai-rest.ru",
     },
     {
       name: "ТАЙГА",
-      desc: "Сибирский вкус в сердце города",
       imgRest: "DSC_7380.png.webp",
       imgFood: "food2.png", // замените на реальный путь
       link: "https://taigahotel.ru/restaurant#/",
@@ -481,17 +476,6 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
                 <h3 className="text-4xl md:text-6xl mb-4 group-hover:text-taiga-gold transition-colors duration-300">
                   {item.name}
                 </h3>
-
-                <p className="text-sm md:text-base opacity-60 uppercase tracking-widest leading-relaxed mb-6">
-                  {item.desc}
-                </p>
-
-                <div className="inline-flex items-center gap-2 group-hover:translate-x-2 transition-transform duration-300">
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
-                    Перейти на сайт
-                  </span>
-                  <ArrowUpRight size={18} className="text-taiga-gold" />
-                </div>
               </div>
             </motion.a>
           ))}
@@ -630,7 +614,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
           {/* Левая часть: Фото */}
           <div className="md:w-1/2 h-[300px] md:h-auto relative">
             <img
-              src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
               className="absolute inset-0 w-full h-full object-cover"
               alt="Career at Taiga"
             />
@@ -738,7 +722,7 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
   ];
   const [berryList, setBerryList] = useState<any[]>([]);
   useEffect(() => {
-    const generatedBerries = Array.from({ length: 10 }).map((_, i) => ({
+    const generatedBerries = Array.from({ length: 15 }).map((_, i) => ({
       id: i,
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 45}%`,
