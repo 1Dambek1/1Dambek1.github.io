@@ -730,7 +730,7 @@ export const News = ({ onEnter, setCursor, isDesktop }: any) => {
     },
     {
       id: 2,
-      img: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
+      img: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
       title: "События отеля Тайга",
       desc: "Уникальное путешествие по Сибири в сопровождении авторских мероприятий.",
       href: "https://azatay.ru/afisha#/",
