@@ -1,37 +1,34 @@
 "use server";
 
-import { createClient } from "next-sanity";
-
-// Создаем клиент с правами админа (через токен)
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  token: process.env.SANITY_API_TOKEN, // Токен из .env файла
-  useCdn: false, // Нам нужны свежие данные
-  apiVersion: "2024-01-01",
-});
-
 export async function submitCareerForm(formData: FormData) {
   const name = formData.get("name") as string;
   const phone = formData.get("phone") as string;
 
-  if (!name || !phone) {
-    return { error: "Пожалуйста, заполните все поля" };
-  }
+  if (!name || !phone) return { error: "Заполните поля" };
+
+  const BOT_TOKEN = "8039284568:AAFxwePvOV393PCUY8ShPxvCMRNeWGKKpdQ";
+
+  // Вставь сюда ID ГРУППЫ (с минусом в начале)
+  const GROUP_CHAT_ID = "-1003768733105";
+
+  const text = `
+🌲 <b>НОВАЯ ЗАЯВКА В ГРУППУ</b>
+👤 <b>Имя:</b> ${name}
+📞 <b>Тел:</b> <code>${phone}</code>
+  `.trim();
 
   try {
-    // Создаем документ в базе данных Sanity
-    await client.create({
-      _type: "careerEntry", // Тип, который мы создали в схеме
-      name,
-      phone,
-      status: "new",
-      submittedAt: new Date().toISOString(),
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: GROUP_CHAT_ID,
+        text: text,
+        parse_mode: "HTML",
+      }),
     });
-
     return { success: true };
-  } catch (error) {
-    console.error("Ошибка Sanity:", error);
-    return { error: "Ошибка сервера. Попробуйте позже." };
+  } catch (e) {
+    return { error: "Ошибка" };
   }
 }

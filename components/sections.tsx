@@ -20,7 +20,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { BranchSVG, Logo, Section } from "./ui";
-import { submitCareerForm } from "@/app/sections";
 // ... импорт server actions (об этом ниже)
 
 const useIsDesktop = () => {
@@ -282,7 +281,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Дизайнерский",
       desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
-      img: "ТАЙГА.mp4",
+      img: "ТАЙГА.mp4",
       logo: "/logos/taiga-white.svg",
       themeBg: "#151C19",
       poster: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
@@ -596,14 +595,39 @@ export const Events = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
+import { submitCareerForm } from "@/app/sections"; // Импортируем наш экшен
+
 export const Career = ({ onEnter, setCursor }: any) => {
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState("idle"); // "idle" | "loading" | "success" | "error"
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const result = await submitCareerForm(formData);
+
+      if (result?.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMessage(result?.error || "Произошла ошибка");
+      }
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage("Ошибка сети. Попробуйте позже.");
+    }
+  };
 
   return (
     <Section onEnter={onEnter} className="py-20 md:py-32">
       <div className="container mx-auto px-6">
         <div className="bg-white rounded-[32px] overflow-hidden flex flex-col md:flex-row shadow-2xl">
-          {/* Левая часть: Фото (50%) */}
+          {/* Левая часть: Фото */}
           <div className="md:w-1/2 h-[300px] md:h-auto relative">
             <img
               src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"
@@ -621,7 +645,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
             </div>
           </div>
 
-          {/* Правая часть: Простая форма (50%) */}
+          {/* Правая часть: Форма */}
           <div className="md:w-1/2 p-8 md:p-16 bg-white flex flex-col justify-center">
             {status === "success" ? (
               <motion.div
@@ -636,13 +660,13 @@ export const Career = ({ onEnter, setCursor }: any) => {
                   Заявка отправлена
                 </h3>
                 <p className="text-taiga-deep/50 text-sm">
-                  Мы перезвоним вам в ближайшее время.
+                  Мы получили ваше сообщение и напишем вам в Telegram.
                 </p>
               </motion.div>
             ) : (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-2xl text-taiga-deep uppercase ">
+                  <h3 className="text-2xl text-taiga-deep uppercase">
                     Оставьте контакты
                   </h3>
                   <p className="text-taiga-deep/40 text-sm">
@@ -650,34 +674,41 @@ export const Career = ({ onEnter, setCursor }: any) => {
                   </p>
                 </div>
 
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setStatus("success");
-                  }}
-                  className="space-y-6"
-                >
-                  <input
-                    type="text"
-                    placeholder="Ваше имя"
-                    required
-                    className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Телефон"
-                    required
-                    className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all"
-                  />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <input
+                      type="text"
+                      name="name" // ОБЯЗАТЕЛЬНО: name="name"
+                      placeholder="Ваше имя"
+                      required
+                      disabled={status === "loading"}
+                      className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all disabled:opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      name="phone" // ОБЯЗАТЕЛЬНО: name="phone"
+                      placeholder="Телефон"
+                      required
+                      disabled={status === "loading"}
+                      className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all disabled:opacity-50"
+                    />
+                  </div>
+
+                  {status === "error" && (
+                    <p className="text-red-500 text-xs">{errorMessage}</p>
+                  )}
 
                   <button
                     type="submit"
+                    disabled={status === "loading"}
                     onMouseEnter={() => setCursor(true, "SEND")}
                     onMouseLeave={() => setCursor(false, "")}
-                    className="w-full bg-[#D6C6B0] hover:bg-[#D6C6B0] text-white h-16 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg shadow-taiga-deep/10"
+                    className="w-full bg-[#D6C6B0] hover:bg-[#c4b59f] text-white h-16 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg shadow-taiga-deep/10 disabled:grayscale disabled:cursor-not-allowed"
                   >
-                    Отправить
-                    <ArrowRight size={18} />
+                    {status === "loading" ? "Отправка..." : "Отправить"}
+                    {status !== "loading" && <ArrowRight size={18} />}
                   </button>
                 </form>
               </div>
@@ -688,20 +719,19 @@ export const Career = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
-
 export const News = ({ onEnter, setCursor, isDesktop }: any) => {
   const newsData = [
     {
       id: 1,
-      img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-      title: "Событий отеля АЗАТАЙ",
+      img: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
+      title: "События отеля АЗАТАЙ",
       desc: "Музыкальные вечера, гастроужины и атмосфера байкальского гостеприимства в новом месяце.",
       href: "https://azatay.ru/afisha#/",
     },
     {
       id: 2,
-      img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
-      title: "Событий отеля АЗАТАЙ",
+      img: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
+      title: "События отеля Тайга",
       desc: "Уникальное путешествие по Сибири в сопровождении авторских мероприятий.",
       href: "https://azatay.ru/afisha#/",
     },
