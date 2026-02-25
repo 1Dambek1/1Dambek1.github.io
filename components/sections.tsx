@@ -201,7 +201,7 @@ export const Hero = ({ onEnter }: any) => {
           className="absolute inset-0 w-full h-full z-10"
         >
           <motion.video
-            src={encodeURI("/tit.mp4")}
+            src={encodeURI("/videos/tit.mp4")}
             autoPlay
             muted
             loop
@@ -230,10 +230,10 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Парк-отель",
       desc: "Загородный отдых на берегу Байкала",
       loc: "п. Большое Голоустное",
-      img: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
-      logo: "/logos/azatay-white.svg", // Добавьте путь к логотипу
+      img: "/videos/АЗАТАЙ.mp4",
+      logo: "/logos/azatai.png", // Добавьте путь к логотипу
       themeBg: "#3A2226",
-      poster: "",
+      poster: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
       link: "https://www.azatay.ru/",
     },
     {
@@ -242,10 +242,10 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Исторический",
       desc: "Отель в доме купца Н.В. Яковлева",
       loc: "Центр города",
-      img: "historical-wooden-noble-hotel-dark-brown-interior.jpg",
-      logo: "/logos/yakovlev-white.svg",
+      img: "/videos/ЯКОВЛЕВ.mp4",
+      logo: "/logos/yakovlev_hotel.svg",
       themeBg: "#2F2520",
-      poster: "",
+      poster: "historical-wooden-noble-hotel-dark-brown-interior.jpg",
       link: "https://yakovlevhotel.ru/",
     },
     {
@@ -254,10 +254,10 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "City Hotel",
       desc: "Стиль и комфорт в самом центре",
       loc: "Центр города",
-      img: "/elegant-comfortable-hotel-in-historic-city-center.jpg",
-      logo: "/logos/victoria-white.svg",
+      img: "/videos/ВИКТОРИЯ.mp4",
+      logo: "/logos/viktoria.svg",
       themeBg: "#3D3628",
-      poster: "",
+      poster: "/elegant-comfortable-hotel-in-historic-city-center.jpg",
       link: "https://victoryhotel.ru/",
     },
     {
@@ -266,8 +266,8 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Бизнес",
       desc: "Уютный уголок недалеко от центра",
       loc: "Тихий центр",
-      img: "АТЛАС.mp4",
-      logo: "/logos/atlas-white.svg",
+      img: "/videos/АТЛАС.mp4",
+      logo: "/logos/atlas.png",
       themeBg: "#1D2530",
       poster: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
       link: "https://atlas-irk.ru/",
@@ -278,8 +278,8 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       type: "Дизайнерский",
       desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
-      img: "ТАЙГА.mp4",
-      logo: "/logos/taiga-white.svg",
+      img: "/videos/ТАЙГА.mp4",
+      logo: "/logos/taiga.svg",
       themeBg: "#151C19",
       poster: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
       link: "https://taigahotel.ru/",
@@ -518,12 +518,16 @@ export const Events = ({ onEnter, setCursor }: any) => {
               cap: "до 200 персон",
               img: "photo_5413853646258569104_y.jpg",
               link: "https://azatay.ru/konferenc-zal",
+              logo: "/logos/azatai.png",
+              desc: "Панорамный конференц-зал с видом на Байкал",
             },
             {
               name: "Конференц-зал Тайга",
-              cap: "до 200 персон",
-              img: "photo_5413853646258569104_y.jpg",
+              cap: "до 100 персон",
+              img: "DSC06897.jpg",
               link: "https://azatay.ru/konferenc-zal",
+              logo: "/logos/taiga.svg",
+              desc: "Уютный конференц-зал с современным дизайном",
             },
           ].map((h, i) => (
             <motion.a
@@ -558,7 +562,7 @@ export const Events = ({ onEnter, setCursor }: any) => {
               {/* Логотип отеля над названием зала */}
               <div className="flex items-center gap-3 mb-2">
                 <img
-                  src="/logo-hotel.svg" // Замените на реальный путь к логотипу
+                  src={h.logo} // Замените на реальный путь к логотипу
                   alt="Hotel Logo"
                   className="h-6 md:h-8 w-auto opacity-80"
                 />
@@ -570,7 +574,7 @@ export const Events = ({ onEnter, setCursor }: any) => {
                 {h.name}
               </h3>
               <p className="text-[10px] opacity-50 uppercase tracking-widest">
-                Панорамный конференц-зал с видом на Байкал
+                {h.desc}
               </p>
             </motion.a>
           ))}
