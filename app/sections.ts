@@ -6,10 +6,15 @@ export async function submitCareerForm(formData: FormData) {
 
   if (!name || !phone) return { error: "Заполните поля" };
 
-  const BOT_TOKEN = "8039284568:AAFxwePvOV393PCUY8ShPxvCMRNeWGKKpdQ";
+  // Берем данные из переменных окружения
+  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  const GROUP_CHAT_ID = process.env.TELEGRAM_GROUP_ID;
 
-  // Вставь сюда ID ГРУППЫ (с минусом в начале)
-  const GROUP_CHAT_ID = "-1003768733105";
+  // Проверка на случай, если забыл прописать переменные в .env
+  if (!BOT_TOKEN || !GROUP_CHAT_ID) {
+    console.error("Ошибка конфигурации: Переменные окружения не заданы");
+    return { error: "Ошибка сервера" };
+  }
 
   const text = `
 🌲 <b>НОВАЯ ЗАЯВКА В ГРУППУ</b>
@@ -18,17 +23,24 @@ export async function submitCareerForm(formData: FormData) {
   `.trim();
 
   try {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: GROUP_CHAT_ID,
-        text: text,
-        parse_mode: "HTML",
-      }),
-    });
+    const response = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: GROUP_CHAT_ID,
+          text: text,
+          parse_mode: "HTML",
+        }),
+      },
+    );
+
+    if (!response.ok) throw new Error("Telegram API error");
+
     return { success: true };
   } catch (e) {
-    return { error: "Ошибка" };
+    console.error(e);
+    return { error: "Ошибка при отправке" };
   }
 }

@@ -23,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
+
         data-route={pathname}
         // Убираем manrope.className для основного сайта, чтобы работал наш кастомный шрифт из CSS
         // Для студии оставляем дефолтные стили (пустую строку)
