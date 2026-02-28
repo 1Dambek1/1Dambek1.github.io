@@ -618,7 +618,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
           {/* Левая часть: Фото */}
           <div className="md:w-1/2 h-[300px] md:h-auto relative">
             <img
-              src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200"
+              src="./work.png"
               className="absolute inset-0 w-full h-full object-cover"
               alt="Career at Taiga"
             />
