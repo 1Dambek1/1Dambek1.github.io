@@ -180,7 +180,7 @@ export const Hero = ({ onEnter }: any) => {
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Контент заголовка */}
         <div className="text-center z-20 text-white px-6 mt-10 md:mt-0 drop-shadow-2xl pointer-events-none">
-          <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-4 border-b border-white/30 pb-2 inline-block">
+          <p className="text-[11px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-4 border-b border-white/30 pb-2 inline-block">
             Сеть отелей и ресторанов
           </p>
 
@@ -314,11 +314,11 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
     >
       <div className="container mx-auto px-6">
         {/* Шапка раздела: Центрированный заголовок */}
-        <div className="flex flex-col items-center mb-16 md:mb-24 border-b border-white/10 pb-12 text-center">
+        <div className="flex flex-col items-center mb-16 md:mb-24 border-b border-taiga-snow pb-12 text-center">
           <h2 className="text-5xl md:text-8xl font-serif uppercase tracking-[0.1em]">
             Отели
           </h2>
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-60 mt-4">
+          <p className="text-[11px] md:text-xs uppercase tracking-[0.3em] opacity-80 mt-4">
             Территория гостиемпримства
           </p>
         </div>
@@ -348,7 +348,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
               }
             >
               {/* Контейнер медиа */}
-              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-8 relative bg-white/5 shadow-2xl">
+              <div className="h-[280px] md:h-[450px] rounded-sm overflow-hidden mb-8 relative bg-white/50 shadow-2xl">
                 {isVideo(h.img) ? (
                   <motion.video
                     src={encodeURI(h.img)}
@@ -436,7 +436,7 @@ export const Restaurants = ({ onEnter, setCursor }: any) => {
       <div className="container mx-auto px-6">
         {/* Заголовок */}
         <div className="border-b border-taiga-deep/10 pb-8 mb-16 text-center md:text-left">
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 opacity-60">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 opacity-80">
             Гастрономия
           </p>
           <h2 className="text-5xl md:text-8xl font-light uppercase tracking-tighter">
@@ -518,7 +518,7 @@ export const Events = ({ onEnter, setCursor }: any) => {
           <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-[0.1em]">
             Конференц-залы
           </h2>
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-60 mt-4">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-80 mt-4">
             Площадки для ваших событий
           </p>
         </div>
@@ -955,12 +955,12 @@ export const Footer = ({ onEnter, setCursor }: any) => {
             {/* <h4 className="font-bold text-[10px] mt-8 mb-4 md:mb-8 uppercase tracking-widest text-taiga-green">
               Контакты
             </h4>
-            <p className="text-lg md:text-xl font-serif mb-2">
+            <p className="text-lg md:text-xs font-serif mb-2">
               +7 (3952) 00-00-00
             </p> */}
           </div>
         </div>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end text-[9px] uppercase opacity-20 tracking-widest border-t border-taiga-deep/5 pt-8 gap-2">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end text-[11px] uppercase opacity-20 tracking-widest border-t border-taiga-deep/5 pt-8 gap-2">
           <p>Все права защищены.</p>
         </div>
       </div>

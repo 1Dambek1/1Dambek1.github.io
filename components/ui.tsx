@@ -23,7 +23,7 @@ export const Logo = () => (
         Территория
       </span>
       <div className="flex items-center justify-between w-full">
-        <span className="font-sans text-[9px] leading-none tracking-[0.3em] opacity-80 uppercase">
+        <span className="font-sans text-[11px] leading-none tracking-[0.3em] opacity-80 uppercase">
           Тайги
         </span>
       </div>
