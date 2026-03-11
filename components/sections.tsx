@@ -601,7 +601,6 @@ export const Events = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
-// import { submitCareerForm } from "@/app/sections"; // Импортируем наш экшен
 
 export const Career = ({ onEnter, setCursor }: any) => {
   const [status, setStatus] = useState("idle"); // "idle" | "loading" | "success" | "error"
@@ -613,20 +612,43 @@ export const Career = ({ onEnter, setCursor }: any) => {
     setErrorMessage("");
 
     const formData = new FormData(e.currentTarget);
+    const name = formData.get("name");
+    const phone = formData.get("phone");
 
-    // try {
-    //   const result = await submitCareerForm(formData);
+    // Замените эти значения на ваши или используйте process.env (с префиксом NEXT_PUBLIC_ в Next.js)
+    const BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
+    const GROUP_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_GROUP_ID;
 
-    //   if (result?.success) {
-    //     setStatus("success");
-    //   } else {
-    //     setStatus("error");
-    //     setErrorMessage(result?.error || "Произошла ошибка");
-    //   }
-    // } catch (err) {
-    //   setStatus("error");
-    //   setErrorMessage("Ошибка сети. Попробуйте позже.");
-    // }
+    const message = `
+🌲 <b>НОВАЯ ЗАЯВКА (КАРЬЕРА)</b>
+👤 <b>Имя:</b> ${name}
+📞 <b>Тел:</b> ${phone}
+    `.trim();
+
+    try {
+      const response = await fetch(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: GROUP_CHAT_ID,
+            text: message,
+            parse_mode: "HTML",
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Ошибка при отправке в Telegram");
+      }
+
+      setStatus("success");
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+      setErrorMessage("Не удалось отправить заявку. Попробуйте позже.");
+    }
   };
 
   return (
@@ -640,7 +662,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
               className="absolute inset-0 w-full h-full object-cover"
               alt="Career at Taiga"
             />
-            <div className="absolute inset-0 bg-taiga-deep/20" />
+            <div className="absolute inset-0 bg-black/20" />
             <div className="absolute bottom-8 left-8 text-white">
               <p className="text-[10px] uppercase tracking-[0.3em] opacity-80 mb-2">
                 Работа у нас
@@ -659,23 +681,23 @@ export const Career = ({ onEnter, setCursor }: any) => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center space-y-4"
               >
-                <div className="w-16 h-16 bg-taiga-green text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-green-800 text-white rounded-full flex items-center justify-center mx-auto mb-4">
                   <Check size={32} />
                 </div>
-                <h3 className="text-2xl text-taiga-deep font-medium">
+                <h3 className="text-2xl text-slate-900 font-medium">
                   Заявка отправлена
                 </h3>
-                <p className="text-taiga-deep/50 text-sm">
-                  Мы получили ваше сообщение и напишем вам в Telegram.
+                <p className="text-slate-500 text-sm">
+                  Мы получили ваше сообщение и скоро свяжемся с вами.
                 </p>
               </motion.div>
             ) : (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-2xl text-taiga-deep uppercase">
+                  <h3 className="text-2xl text-slate-900 uppercase">
                     Оставьте контакты
                   </h3>
-                  <p className="text-taiga-deep/40 text-sm">
+                  <p className="text-slate-400 text-sm">
                     Мы свяжемся с вами, чтобы обсудить вакансии
                   </p>
                 </div>
@@ -684,21 +706,21 @@ export const Career = ({ onEnter, setCursor }: any) => {
                   <div>
                     <input
                       type="text"
-                      name="name" // ОБЯЗАТЕЛЬНО: name="name"
+                      name="name"
                       placeholder="Ваше имя"
                       required
                       disabled={status === "loading"}
-                      className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all disabled:opacity-50"
+                      className="w-full bg-slate-50 border-none rounded-xl py-4 px-6 text-slate-900 outline-none focus:ring-1 focus:ring-amber-200 transition-all disabled:opacity-50"
                     />
                   </div>
                   <div>
                     <input
                       type="tel"
-                      name="phone" // ОБЯЗАТЕЛЬНО: name="phone"
+                      name="phone"
                       placeholder="Телефон"
                       required
                       disabled={status === "loading"}
-                      className="w-full bg-taiga-snow border-none rounded-xl py-4 px-6 text-taiga-deep outline-none focus:ring-1 focus:ring-taiga-gold transition-all disabled:opacity-50"
+                      className="w-full bg-slate-50 border-none rounded-xl py-4 px-6 text-slate-900 outline-none focus:ring-1 focus:ring-amber-200 transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -711,7 +733,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
                     disabled={status === "loading"}
                     onMouseEnter={() => setCursor(true, "SEND")}
                     onMouseLeave={() => setCursor(false, "")}
-                    className="w-full bg-[#D6C6B0] hover:bg-[#c4b59f] text-white h-16 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg shadow-taiga-deep/10 disabled:grayscale disabled:cursor-not-allowed"
+                    className="w-full bg-[#D6C6B0] hover:bg-[#c4b59f] text-white h-16 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-lg disabled:grayscale disabled:cursor-not-allowed"
                   >
                     {status === "loading" ? "Отправка..." : "Отправить"}
                     {status !== "loading" && <ArrowRight size={18} />}
