@@ -148,15 +148,28 @@ export const Hero = ({ onEnter }: any) => {
   const opacity = useTransform(scrollY, [0, 700, 1000], [1, 1, 0]);
 
   const [index, setIndex] = useState(0);
+
   const words = ["ДОВЕРИЯ", "КОМФОРТА", "СЕРВИСА", "ПРИРОДЫ"];
 
+  // Массив видео
+  const videos = [
+    "/videos/АЗАТАЙ.mp4",
+    "/videos/ЯКОВЛЕВ.mp4",
+    "/videos/ВИКТОРИЯ.mp4",
+    "/videos/АТЛАС.mp4",
+    "/videos/ТАЙГА.mp4",
+  ];
+
   useEffect(() => {
-    const i = setInterval(
-      () => setIndex((prev) => (prev + 1) % words.length),
-      2500,
-    );
+    const i = setInterval(() => {
+      setIndex((prev) => prev + 1);
+    }, 3500); // Увеличил интервал до 3.5с, чтобы видео успело "подышать"
     return () => clearInterval(i);
-  }, []); // Убери words.length отсюда
+  }, []);
+
+  // Используем остаток от деления, чтобы индексы слов и видео крутились независимо от длины массивов
+  const currentWord = words[index % words.length];
+  const currentVideo = videos[index % videos.length];
 
   return (
     <Section
@@ -166,57 +179,62 @@ export const Hero = ({ onEnter }: any) => {
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Контент заголовка */}
-        <div className="text-center z-20 text-white px-6 mt-10 md:mt-0 drop-shadow-2xl">
+        <div className="text-center z-20 text-white px-6 mt-10 md:mt-0 drop-shadow-2xl pointer-events-none">
           <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-4 border-b border-white/30 pb-2 inline-block">
             Сеть отелей и ресторанов
           </p>
 
           <h1 className="flex flex-col items-center justify-center">
-            {/* На мобилках text-[11vw], на десктопе [8vw] */}
             <span className="text-[11vw] md:text-[8vw] leading-none font-serif font-medium tracking-tight">
               ТЕРРИТОРИЯ
             </span>
 
-            {/* Контейнер для меняющихся слов */}
             <span className="block h-[1.2em] overflow-hidden text-taiga-gold text-[11vw] md:text-[8vw] leading-none font-serif font-medium tracking-tight">
               <AnimatePresence mode="wait">
                 <motion.span
-                  key={words[index]}
+                  key={currentWord}
                   initial={{ y: "100%" }}
                   animate={{ y: "0%" }}
                   exit={{ y: "-100%" }}
                   transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
                   className="block"
                 >
-                  {words[index]}
+                  {currentWord}
                 </motion.span>
               </AnimatePresence>
             </span>
           </h1>
         </div>
 
-        {/* Видео-фон */}
+        {/* Видео-фон с анимацией смены */}
         <motion.div
           style={{ scale, opacity }}
-          className="absolute inset-0 w-full h-full z-10"
+          className="absolute inset-0 w-full h-full z-10 bg-black"
         >
-          <motion.video
-            src={encodeURI("/videos/tit.mp4")}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[300%] md:min-w-[150%] min-h-[150%] object-cover pointer-events-none"
-          />
+          <AnimatePresence mode="popLayout">
+            <motion.video
+              key={currentVideo}
+              src={encodeURI(currentVideo)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[100%] min-h-[100%] object-cover pointer-events-none"
+            />
+          </AnimatePresence>
+
           {/* Затемнение для читаемости */}
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/40 z-10" />
         </motion.div>
       </div>
     </Section>
   );
 };
-
 // ... Остальные компоненты (Hotels, Restaurants и т.д.) остаются без изменений ...
 // ... Ниже только измененный компонент Career для обработки формы ...
 
@@ -301,7 +319,7 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
             Отели
           </h2>
           <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] opacity-60 mt-4">
-            Коллекция уникальных мест
+            Территория гостиемпримства
           </p>
         </div>
 
@@ -597,7 +615,7 @@ export const Career = ({ onEnter, setCursor }: any) => {
     const formData = new FormData(e.currentTarget);
 
     try {
-      const result = await submitCareerForm(formData);
+      // const result = await submitCareerForm(formData);
 
       if (result?.success) {
         setStatus("success");
@@ -863,8 +881,8 @@ export const Footer = ({ onEnter, setCursor }: any) => {
     { name: "Конференц-зал Азатай", href: "https://azatay.ru/konferenc-zal" },
   ];
   const socialLinks = [
-    { name: "Telegram Тайга", href: "https://t.me/taiga_irkutsk_hotel" },
-    { name: "Telegram Азатай", href: " https://t.me/azataybaikal" },
+    { name: "Телеграмм Тайга", href: "https://t.me/taiga_irkutsk_hotel" },
+    { name: "Телеграмм Азатай", href: " https://t.me/azataybaikal" },
   ];
 
   return (
@@ -944,7 +962,6 @@ export const Footer = ({ onEnter, setCursor }: any) => {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end text-[9px] uppercase opacity-20 tracking-widest border-t border-taiga-deep/5 pt-8 gap-2">
           <p>Все права защищены.</p>
-          <p>Made with Nature</p>
         </div>
       </div>
     </Section>
