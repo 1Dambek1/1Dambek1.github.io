@@ -601,7 +601,7 @@ export const Events = ({ onEnter, setCursor }: any) => {
     </Section>
   );
 };
-import { submitCareerForm } from "@/app/sections"; // Импортируем наш экшен
+// import { submitCareerForm } from "@/app/sections"; // Импортируем наш экшен
 
 export const Career = ({ onEnter, setCursor }: any) => {
   const [status, setStatus] = useState("idle"); // "idle" | "loading" | "success" | "error"
@@ -614,19 +614,19 @@ export const Career = ({ onEnter, setCursor }: any) => {
 
     const formData = new FormData(e.currentTarget);
 
-    try {
-      const result = await submitCareerForm(formData);
+    // try {
+    //   const result = await submitCareerForm(formData);
 
-      if (result?.success) {
-        setStatus("success");
-      } else {
-        setStatus("error");
-        setErrorMessage(result?.error || "Произошла ошибка");
-      }
-    } catch (err) {
-      setStatus("error");
-      setErrorMessage("Ошибка сети. Попробуйте позже.");
-    }
+    //   if (result?.success) {
+    //     setStatus("success");
+    //   } else {
+    //     setStatus("error");
+    //     setErrorMessage(result?.error || "Произошла ошибка");
+    //   }
+    // } catch (err) {
+    //   setStatus("error");
+    //   setErrorMessage("Ошибка сети. Попробуйте позже.");
+    // }
   };
 
   return (
