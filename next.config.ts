@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig = {
   output: "export", // статический экспорт
-  distDir: "out", // папка для статических файлов
+  distDir: "project/out", // папка для статических файлов
   images: {
     unoptimized: true, // если есть <Image /> компоненты
   },

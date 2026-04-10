@@ -139,8 +139,6 @@ export const Header = ({
     </>
   );
 };
-
-// --- HERO (ИСПРАВЛЕНО: Адаптивность и размеры) ---
 export const Hero = ({ onEnter }: any) => {
   const { scrollY } = useScroll();
   const scrollRange = [0, 1000];
@@ -150,8 +148,6 @@ export const Hero = ({ onEnter }: any) => {
   const [index, setIndex] = useState(0);
 
   const words = ["ДОВЕРИЯ", "КОМФОРТА", "СЕРВИСА", "ПРИРОДЫ"];
-
-  // Массив видео
   const videos = [
     "/videos/АЗАТАЙ.mp4",
     "/videos/ЯКОВЛЕВ.mp4",
@@ -160,22 +156,30 @@ export const Hero = ({ onEnter }: any) => {
     "/videos/ТАЙГА.mp4",
   ];
 
-  useEffect(() => {
-    const i = setInterval(() => {
-      setIndex((prev) => prev + 1);
-    }, 3500); // Увеличил интервал до 3.5с, чтобы видео успело "подышать"
-    return () => clearInterval(i);
-  }, []);
-
-  // Используем остаток от деления, чтобы индексы слов и видео крутились независимо от длины массивов
   const currentWord = words[index % words.length];
-  const currentVideo = videos[index % videos.length];
+  const activeIndex = index % videos.length;
+
+  // Исправленная типизация для массива рефов
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  useEffect(() => {
+    videoRefs.current.forEach((video, i) => {
+      if (video) {
+        if (i === activeIndex) {
+          video.play().catch(() => {}); // Игнорируем ошибки автоплея
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    });
+  }, [activeIndex]);
 
   return (
     <Section
       id="hero"
       onEnter={onEnter}
-      className="h-[100vh] md:h-[140vh] relative"
+      className="h-[100vh] md:h-[140vh] relative bg-black"
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Контент заголовка */}
@@ -206,30 +210,32 @@ export const Hero = ({ onEnter }: any) => {
           </h1>
         </div>
 
-        {/* Видео-фон с анимацией смены */}
+        {/* Видео-фон */}
         <motion.div
           style={{ scale, opacity }}
           className="absolute inset-0 w-full h-full z-10 bg-black"
         >
-          <AnimatePresence mode="popLayout">
-            <motion.video
-              key={currentVideo}
-              src={encodeURI(currentVideo)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: "easeInOut" }}
-              autoPlay
+          {videos.map((src, i) => (
+            <video
+              key={src}
+              // ИСПРАВЛЕНО: Добавлены фигурные скобки, чтобы функция возвращала void
+              ref={(el) => {
+                videoRefs.current[i] = el;
+              }}
+              src={encodeURI(src)}
               muted
-              loop
               playsInline
               preload="auto"
-              className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[100%] min-h-[100%] object-cover pointer-events-none"
+              onEnded={() => {
+                if (i === activeIndex) setIndex((prev) => prev + 1);
+              }}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out pointer-events-none ${
+                i === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
             />
-          </AnimatePresence>
+          ))}
 
-          {/* Затемнение для читаемости */}
-          <div className="absolute inset-0 bg-black/40 z-10" />
+          <div className="absolute inset-0 bg-black/40 z-20 pointer-events-none" />
         </motion.div>
       </div>
     </Section>
@@ -249,7 +255,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Загородный отдых на берегу Байкала",
       loc: "п. Большое Голоустное",
       img: "/videos/АЗАТАЙ.mp4",
-      logo: "/logos/azatai.png", // Добавьте путь к логотипу
       themeBg: "#3A2226",
       poster: "japanese-zen-hotel-room-white-sakura-minimalist-ba.jpg",
       link: "https://www.azatay.ru/",
@@ -261,7 +266,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Отель в доме купца Н.В. Яковлева",
       loc: "Центр города",
       img: "/videos/ЯКОВЛЕВ.mp4",
-      logo: "/logos/yakovlev_hotel.svg",
       themeBg: "#2F2520",
       poster: "historical-wooden-noble-hotel-dark-brown-interior.jpg",
       link: "https://yakovlevhotel.ru/",
@@ -273,7 +277,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Стиль и комфорт в самом центре",
       loc: "Центр города",
       img: "/videos/ВИКТОРИЯ.mp4",
-      logo: "/logos/viktoria.svg",
       themeBg: "#3D3628",
       poster: "/elegant-comfortable-hotel-in-historic-city-center.jpg",
       link: "https://victoryhotel.ru/",
@@ -285,7 +288,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Уютный уголок недалеко от центра",
       loc: "Тихий центр",
       img: "/videos/АТЛАС.mp4",
-      logo: "/logos/atlas.png",
       themeBg: "#1D2530",
       poster: "modern-bright-hotel-lobby-blue-white-green-colors.jpg",
       link: "https://atlas-irk.ru/",
@@ -297,7 +299,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
       desc: "Любимое место для гостей и жителей города",
       loc: "Иркутск",
       img: "/videos/ТАЙГА.mp4",
-      logo: "/logos/taiga.svg",
       themeBg: "#151C19",
       poster: "forest-themed-hotel-green-nature-siberian-taiga.jpg",
       link: "https://taigahotel.ru/",
@@ -377,16 +378,6 @@ export const Hotels = ({ onEnter, setCursor, setHoverBg, setTheme }: any) => {
                 <div className="absolute top-4 right-4 bg-taiga-snow text-taiga-deep px-3 py-1 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-lg z-10">
                   {h.type}
                 </div>
-              </div>
-
-              {/* Блок с логотипом конкретного отеля */}
-              <div className="flex items-center gap-3 mb-4">
-                <img
-                  src={h.logo}
-                  alt={`${h.name} logo`}
-                  className="h-8 md:h-10 w-auto object-contain opacity-90"
-                />
-                <div className="h-[1px] w-12 bg-white/20" />
               </div>
 
               <h3
@@ -536,7 +527,6 @@ export const Events = ({ onEnter, setCursor }: any) => {
               cap: "до 200 персон",
               img: "photo_5413853646258569104_y.jpg",
               link: "https://azatay.ru/konferenc-zal",
-              logo: "/logos/azatai.png",
               desc: "Панорамный конференц-зал с видом на Байкал",
             },
             {
@@ -544,7 +534,6 @@ export const Events = ({ onEnter, setCursor }: any) => {
               cap: "до 100 персон",
               img: "DSC06897.jpg",
               link: "https://azatay.ru/konferenc-zal",
-              logo: "/logos/taiga.svg",
               desc: "Уютный конференц-зал с современным дизайном",
             },
           ].map((h, i) => (
@@ -575,17 +564,6 @@ export const Events = ({ onEnter, setCursor }: any) => {
                   </span>
                   <ArrowUpRight size={16} />
                 </div>
-              </div>
-
-              {/* Логотип отеля над названием зала */}
-              <div className="flex items-center gap-3 mb-2">
-                <img
-                  src={h.logo} // Замените на реальный путь к логотипу
-                  alt="Hotel Logo"
-                  className="h-6 md:h-8 w-auto opacity-80"
-                />
-                <div className="h-[1px] w-8 bg-taiga-deep/20" />{" "}
-                {/* Декоративная линия */}
               </div>
 
               <h3 className="text-2xl md:text-3xl font-serif mb-1 uppercase tracking-wide">

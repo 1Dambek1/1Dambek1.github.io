@@ -1,9 +1,7 @@
-"use client";
-import { usePathname } from "next/navigation";
-// Manrope можно убрать из импорта, если он больше нигде не нужен,
-// но оставим на всякий случай, если захотите вернуть его как запасной вариант.
+import { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import ClientRouteWrapper from "./client-route-wrapper";
 
 const manrope = Manrope({
   subsets: ["cyrillic", "latin"],
@@ -11,25 +9,38 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
+export const metadata: Metadata = {
+  metadataBase: new URL("https://t-taigi.ru"), // Обязательно для картинок!
+  title: "ТЕРРИТОРИЯ ТАЙГИ",
+  description: "Сеть отелей и ресторанов на Алтае",
+  openGraph: {
+    title: "ТЕРРИТОРИЯ ТАЙГИ",
+    description:
+      "Почувствуйте атмосферу комфорта и природы в самом сердце тайги.",
+    url: "https://t-taigi.ru",
+    siteName: "ТЕРРИТОРИЯ ТАЙГИ",
+    images: [
+      {
+        url: "/DSC04013-HDR.jpg", // Файл должен лежать в папке public
+        width: 1200,
+        height: 630,
+        alt: "ТЕРРИТОРИЯ ТАЙГИ Превью",
+      },
+    ],
+    locale: "ru_RU",
+    type: "website",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  // Проверяем, находимся ли мы в админке Sanity (Studio)
-  const isStudio = pathname?.startsWith("/studio");
-
   return (
     <html lang="ru">
-      <body
-
-        data-route={pathname}
-        // Убираем manrope.className для основного сайта, чтобы работал наш кастомный шрифт из CSS
-        // Для студии оставляем дефолтные стили (пустую строку)
-        className={isStudio ? "" : ""}
-      >
-        {children}
+      <body className={manrope.variable}>
+        <ClientRouteWrapper>{children}</ClientRouteWrapper>
       </body>
     </html>
   );
